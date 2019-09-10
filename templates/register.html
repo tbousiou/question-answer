@@ -13,7 +13,7 @@
         <hr>
 
         <div class="row ">
-          <form class="col s12" method="POST" action="/register">
+          <form class="col s12" method="POST" action="{{ url_for('register') }}">
             <div class="card-panel ">
 
               <div class="row">
@@ -21,7 +21,7 @@
                   <p>Username</p>
                 </div>
                 <div class="input-field col s10">
-                  <input placeholder="Enter username" id="user_name" name="name" type="text" class="validate">
+                  <input placeholder="Enter username" id="name" name="name" type="text" class="validate">
                 </div>
               </div>
               
