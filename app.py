@@ -1,8 +1,14 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, g
+from database import get_db
 
 app = Flask(__name__)
 
 
+# Required to close the database connection after every request
+@app.teardown_appcontext
+def close_db(error):
+	if hasattr(g, 'sqlite_db'):
+		g.sqlite_db.close()
 
 
 #App Routes
@@ -10,7 +16,7 @@ app = Flask(__name__)
 def index():
 	return render_template('index.html')
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
 	return render_template('register.html')
 
