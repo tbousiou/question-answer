@@ -6,16 +6,8 @@
  * Made By MaterializeCSS.com
  */
 
-.icon-block {
-  padding: 0 15px;
-}
-.icon-block .material-icons {
-	font-size: inherit;
-}
-
-
- body {
-    display: flex;
+body {
+	display: flex;
     min-height: 100vh;
     flex-direction: column;
  }

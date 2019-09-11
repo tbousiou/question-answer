@@ -15,7 +15,7 @@
       <ul class="right hide-on-med-and-down">
         <li><a href="{{url_for('index')}}">Home</a></li>
         {%if user and user['admin'] == 0 and user['expert'] == 0 %}
-        <li><a href="{{ url_for('question') }}">Ask Question</a></li>
+        <li><a href="{{ url_for('ask') }}">Ask Question</a></li>
         {% endif %}
         {%if user and user['expert'] == 1 %}
         <li><a href="{{url_for('answer') }}">Answer Question</a></li>

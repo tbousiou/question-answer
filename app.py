@@ -47,7 +47,10 @@ def register():
 		query = 'insert into users (name, password, expert, admin) values (?, ?, ?, ?)'
 		db.execute(query, [name, hashed_password, 0, 0])
 		db.commit()
-		return f'<h2>User {name} created with password {password}<h2>'
+
+		session['user'] = name
+		return redirect(url_for('index'))
+		#return f'<h2>User {name} created with password {password}<h2>'
 
 	return render_template('register.html', user=user)
 
@@ -86,12 +89,25 @@ def question():
 	return render_template('question.html', user=user)
 
 
-@app.route('/ask')
+@app.route('/ask',  methods=['GET', 'POST'])
 def ask():
-
-	user = get_current_user()
 	
-	return render_template('ask.html', user=user)
+	user = get_current_user()
+	db = get_db()
+
+	if request.method == 'POST':
+		db.execute('insert into questions (question_text, asked_by_id, expert_id) values (?, ?, ?)', [request.form['question'], user['id'], request.form['expert'] ])
+		db.commit()
+
+		#return f"Question: {request.form['question']}, Expert: {request.form['expert']}"
+		return redirect(url_for('index'))
+	
+
+	
+	expert_cur = db.execute('select id, name from users where expert = 1')
+	expert_results = expert_cur.fetchall()
+	
+	return render_template('ask.html', user=user, experts=expert_results)
 
 
 @app.route('/answer')
@@ -113,12 +129,24 @@ def users():
 
 	user = get_current_user()
 
-	return render_template('users.html', user=user)
+	db = get_db()
+	users_cur = db.execute('select id, name, expert, admin from users')
+	users_results = users_cur.fetchall()
+
+	return render_template('users.html', user=user, users=users_results)
 
 @app.route('/logout')
 def logout():
 	session.pop('user', None)
 	return redirect(url_for('index'))
+
+@app.route('/promote/<user_id>')
+def promote(user_id):
+	db = get_db()
+	db.execute('update users set expert = 1 where id = ?', [user_id])
+	db.commit()
+
+	return redirect(url_for('users'))
 
 if __name__ == '__main__':
 	app.run(debug=True)

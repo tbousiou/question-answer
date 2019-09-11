@@ -13,15 +13,11 @@
 
         <hr>
         <ul class="collection">
-          <li class="collection-item">
-            <a href="#">John</a>
+          {% for user in users %}
+          <li class="collection-item {% if user['expert'] == 1 %} orange lighten-5 {% endif %}">
+            <a href="{{ url_for('promote', user_id=user['id']) }}">{{ user['name'] }}</a>
           </li>
-          <li class="collection-item">
-            <a href="#">Anthony</a>
-          </li>
-          <li class="collection-item">
-            <a href="#">Teo</a>
-          </li>
+          {% endfor %}
         </ul>
 
       </div>
