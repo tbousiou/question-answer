@@ -14,12 +14,22 @@
       <div class="nav-wrapper container"><a id="logo-container" href="index.html" class="brand-logo">Questions & Answers</a>
       <ul class="right hide-on-med-and-down">
         <li><a href="{{url_for('index')}}">Home</a></li>
-        <li><a href="{{url_for('login')}}">Login</a></li>
-        <li><a href="{{url_for('register')}}">Register</a></li>
-        <li><a href="{{url_for('question')}}">Ask Question</a></li>
-        <li><a href="{{url_for('answer')}}">Answer Question</a></li>
-        <li><a href="user_setup.html">User Setup</a></li>
-        <li><a href="logout.html">Logout</a></li>
+        {%if user and user['admin'] == 0 and user['expert'] == 0 %}
+        <li><a href="{{ url_for('question') }}">Ask Question</a></li>
+        {% endif %}
+        {%if user and user['expert'] == 1 %}
+        <li><a href="{{url_for('answer') }}">Answer Question</a></li>
+        {% endif %}
+        {%if user and user['admin'] == 1 %}
+        <li><a href="{{ url_for('users') }}">User Setup</a></li>
+        {% endif %}
+        {% if not user %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('register') }}">Register</a></li>
+        {% endif %}
+        {%if user %}
+        <li><a href="{{url_for('logout')}}">Logout</a></li>
+        {% endif %}
       </ul>
       <ul id="nav-mobile" class="sidenav">
         <li><a href="index.html">Home</a></li>
