@@ -15,6 +15,7 @@ def get_current_user():
 		query = 'select id, name, password, expert, admin from users where name = ?'
 		user_cur = db.execute(query, [user])
 		user_result = user_cur.fetchone()
+		#print(user_result['id'])
 
 	return user_result
 
@@ -110,19 +111,43 @@ def ask():
 	return render_template('ask.html', user=user, experts=expert_results)
 
 
-@app.route('/answer')
-def answer():
+@app.route('/answer/<question_id>', methods=['GET', 'POST'])
+def answer(question_id):
 	
 	user = get_current_user()
 
-	return render_template('answer.html', user=user)
+	db = get_db()
+
+	if request.method == 'POST':
+		db.execute('update questions set answer_text = ? where id = ?', [request.form['answer_text'], question_id ])
+		db.commit()
+		return redirect(url_for('unanswered'))
+
+	query = 'select id, question_text from questions where id = ?'
+	question_cur = db.execute(query, [question_id])
+	question = question_cur.fetchone()
+
+	return render_template('answer.html', user=user, question=question)
 
 @app.route('/unanswered')
 def unanswered():
 
 	user = get_current_user()
+	#print(user['id'])
 
-	return render_template('unanswered.html', user=user)
+	db = get_db()
+	query = """
+			select questions.id as id, questions.question_text as question_text, users.name as username
+			from questions
+			join users
+			on questions.asked_by_id = users.id
+			where questions.expert_id = ? and questions.answer_text is null
+			"""
+	questions_cur = db.execute(query, [ user['id'] ])
+	questions_results = questions_cur.fetchall()
+	print(len(questions_results))
+
+	return render_template('unanswered.html', user=user, questions=questions_results)
 
 @app.route('/users')
 def users():

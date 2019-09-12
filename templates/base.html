@@ -11,14 +11,14 @@
   </head>
   <body>
     <nav class="light-blue lighten-1" role="navigation">
-      <div class="nav-wrapper container"><a id="logo-container" href="index.html" class="brand-logo">Questions & Answers</a>
+      <div class="nav-wrapper container"><a id="logo-container" href="{{ url_for('index') }}" class="brand-logo">Questions & Answers</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="{{url_for('index')}}">Home</a></li>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
         {%if user and user['admin'] == 0 and user['expert'] == 0 %}
         <li><a href="{{ url_for('ask') }}">Ask Question</a></li>
         {% endif %}
         {%if user and user['expert'] == 1 %}
-        <li><a href="{{url_for('answer') }}">Answer Question</a></li>
+        <li><a href="{{url_for('unanswered') }}">Answer Question</a></li>
         {% endif %}
         {%if user and user['admin'] == 1 %}
         <li><a href="{{ url_for('users') }}">User Setup</a></li>

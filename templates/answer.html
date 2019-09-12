@@ -9,12 +9,12 @@
     <div class="section">
       <div class="container">
 
-        <h3 class="header orange-text">Answer a question</h3>
-        <p>What is the fucking story?</p>
+        <h3 class="header orange-text">Answer this question:</h3>
+        <h5>{{question.question_text}}</h5>
         <hr>
 
         <div class="row ">
-          <form class="col s12">
+          <form class="col s12" action="{{ url_for('answer', question_id = question.id) }}" method="POST">
             <div class="card-panel ">
 
               <div class="row">
@@ -22,10 +22,9 @@
                   <p>Answer</p>
                 </div>
                 <div class="input-field col s10">
-                  <textarea placeholder="Type your answer" id="textarea1" class="materialize-textarea"></textarea>
+                  <textarea placeholder="Type your answer" id="textarea1" name="answer_text" class="materialize-textarea"></textarea>
                 </div>
               </div>
-              
               
 
               <div class="row">

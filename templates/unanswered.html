@@ -8,21 +8,15 @@
 
     <div class="section">
       <div class="container">
-        <h3 class="header orange-text">Unanswered Questions</h3>
+        <h3 class="header orange-text">Questions for you {{ user['name'] }} to answer</h3>
         <hr>
         <ul class="collection">
+          {% for question in questions %}
           <li class="collection-item">
-            <h5>Question 1</h5>
-            <p><strong>Asked by:</strong> Kotridis<br>
+            <a href="{{ url_for('answer', question_id = question.id) }}"><h5>{{ question.question_text }}</h5></a>
+            <p><strong>Asked by:</strong> {{ question.username }}<br>
           </li>
-          <li class="collection-item">
-            <h5>Question 1</h5>
-            <p><strong>Asked by:</strong> Noulas<br>
-          </li>
-          <li class="collection-item">
-            <h5>Question 1</h5>
-            <p><strong>Asked by:</strong> Svoutmeth<br>
-          </li>
+          {% endfor %}
         </ul>
       </div>
     </div>
