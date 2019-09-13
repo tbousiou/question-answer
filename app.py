@@ -140,10 +140,10 @@ def ask():
 	db = get_db()
 
 	if request.method == 'POST':
-		db.execute('insert into questions (question_text, asked_by_id, expert_id) values (?, ?, ?)', [request.form['question'], user['id'], request.form['expert'] ])
+		query = 'insert into questions (question_text, asked_by_id, expert_id) values (?, ?, ?)'
+		db.execute(query, [request.form['question'], user['id'], request.form['expert'] ])
 		db.commit()
 
-		#return f"Question: {request.form['question']}, Expert: {request.form['expert']}"
 		return redirect(url_for('index'))
 	
 
