@@ -11,21 +11,13 @@
         <h3 class="header orange-text">Answered Questions</h3>
         <hr>
         <ul class="collection">
+          {% for question in questions %}
           <li class="collection-item">
-            <h5>Question 1</h5>
-            <p><strong>Asked by:</strong> Herbert<br>
-            <strong>Answered by:</strong> Anthony</p>
+            <a href="{{ url_for('question', question_id = question.id) }}"><h5>{{ question.question_text }}</h5></a>
+            <p><strong>Asked by:</strong> {{ question.asker }}<br>
+            <strong>Answered by:</strong> {{ question.expert}}</p>
           </li>
-          <li class="collection-item">
-            <h5>Question 1</h5>
-            <p><strong>Asked by:</strong> Herbert<br>
-            <strong>Answered by:</strong> Anthony</p>
-          </li>
-          <li class="collection-item">
-            <h5>Question 1</h5>
-            <p><strong>Asked by:</strong> Herbert<br>
-            <strong>Answered by:</strong> Anthony</p>
-          </li>
+          {% endfor %}
         </ul>
       </div>
     </div>

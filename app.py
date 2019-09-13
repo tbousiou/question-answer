@@ -32,7 +32,20 @@ def close_db(error):
 def index():
 	
 	user = get_current_user()
-	return render_template('index.html', user=user)
+
+	db = get_db()
+	query = """
+			select questions.id as id, questions.question_text as question_text, askers.name as asker, experts.name as expert
+			from questions
+			join users as askers on questions.asked_by_id = askers.id
+			join users as experts on questions.expert_id = experts.id
+			where questions.answer_text is not NULL
+			"""
+	questions_cur = db.execute(query)
+	questions_results = questions_cur.fetchall()
+
+
+	return render_template('index.html', user=user, questions=questions_results)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -82,12 +95,23 @@ def login():
 
 	return render_template('login.html', user=user)
 
-@app.route('/question')
-def question():
+@app.route('/question/<question_id>')
+def question(question_id):
 
 	user = get_current_user()
 	
-	return render_template('question.html', user=user)
+	db = get_db()
+	query = """
+			select questions.question_text as question_text, questions.answer_text as answer_text, askers.name as asker, experts.name as expert
+			from questions
+			join users as askers on questions.asked_by_id = askers.id
+			join users as experts on questions.expert_id = experts.id
+			where questions.id = ?
+			"""
+	question_cur = db.execute(query, [question_id])
+	question = question_cur.fetchone()
+
+	return render_template('question.html', user=user, question=question)
 
 
 @app.route('/ask',  methods=['GET', 'POST'])
@@ -145,7 +169,7 @@ def unanswered():
 			"""
 	questions_cur = db.execute(query, [ user['id'] ])
 	questions_results = questions_cur.fetchall()
-	print(len(questions_results))
+	#print(len(questions_results))
 
 	return render_template('unanswered.html', user=user, questions=questions_results)
 

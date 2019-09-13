@@ -8,11 +8,11 @@
     <div class="section">
       <div class="container">
         <div class="card-panel ">
-          <h3 class="header orange-text">What?</h3>
-          <p class="flow-text">This is the answer</p>
+          <h3 class="header orange-text">{{ question.question_text }}?</h3>
+          <p class="flow-text">{{ question.answer_text }}</p>
           
-          <div class="card-panel orange" style="display: inline-block;">Asked by: Kotridis</div><br>
-          <div class="card-panel orange" style="display: inline-block;">Answered by: John Malakas</div>
+          <div class="card-panel orange" style="display: inline-block;">Asked by: {{ question.asker }}</div><br>
+          <div class="card-panel orange" style="display: inline-block;">Answered by: {{ question.expert }}</div>
         </div>
       </div>
     </div>
