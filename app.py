@@ -99,9 +99,16 @@ def login():
 		else:
 			return '<h2>The password is INcorrect,</h2>'
 
-
-
 	return render_template('login.html', user=user)
+
+
+@app.route('/logout')
+def logout():
+
+	session.pop('user', None)
+	
+	return redirect(url_for('index'))
+
 
 @app.route('/question/<question_id>')
 def question(question_id):
@@ -126,6 +133,10 @@ def question(question_id):
 def ask():
 	
 	user = get_current_user()
+
+	if not user:
+		return redirect(url_for('login'))
+
 	db = get_db()
 
 	if request.method == 'POST':
@@ -148,6 +159,12 @@ def answer(question_id):
 	
 	user = get_current_user()
 
+	if not user:
+		return redirect(url_for('login'))
+
+	if user['expert'] == 0:
+		return redirect(url_for('index'))
+
 	db = get_db()
 
 	if request.method == 'POST':
@@ -165,7 +182,12 @@ def answer(question_id):
 def unanswered():
 
 	user = get_current_user()
-	#print(user['id'])
+
+	if not user:
+		return redirect(url_for('login'))
+
+	if user['expert'] == 0:
+		return redirect(url_for('index'))
 
 	db = get_db()
 	query = """
@@ -186,19 +208,31 @@ def users():
 
 	user = get_current_user()
 
+	if not user:
+		return redirect(url_for('login'))
+
+	if user['admin'] == 0:
+		return redirect(url_for('index'))
+
 	db = get_db()
 	users_cur = db.execute('select id, name, expert, admin from users')
 	users_results = users_cur.fetchall()
 
 	return render_template('users.html', user=user, users=users_results)
 
-@app.route('/logout')
-def logout():
-	session.pop('user', None)
-	return redirect(url_for('index'))
+
 
 @app.route('/promote/<user_id>')
 def promote(user_id):
+
+	user = get_current_user()
+	
+	if not user:
+		return redirect(url_for('login'))
+
+	if user['admin'] == 0:
+		return redirect(url_for('index'))
+
 	db = get_db()
 	db.execute('update users set expert = 1 where id = ?', [user_id])
 	db.commit()
