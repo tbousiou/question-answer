@@ -11,6 +11,9 @@
 
         <h3 class="header orange-text">Register</h3>
         <hr>
+        {% if error %}
+        <div class="card-panel red darken-1 white-text">{{ error }}</div>
+        {% endif %}
 
         <div class="row ">
           <form class="col s12" method="POST" action="{{ url_for('register') }}">
@@ -21,7 +24,7 @@
                   <p>Username</p>
                 </div>
                 <div class="input-field col s10">
-                  <input placeholder="Enter username" id="name" name="name" type="text" class="validate">
+                  <input placeholder="Enter username" id="name" name="name" type="text" class="validate" required>
                 </div>
               </div>
               
@@ -30,7 +33,7 @@
                   <p>Password:</p>
                 </div>
                 <div class="input-field col s10">
-                  <input placeholder="Enter password" id="password" name="password" type="password" class="validate">
+                  <input placeholder="Enter password" id="password" name="password" type="password" class="validate" required>
                 </div>
               </div>
 
